@@ -1,5 +1,5 @@
 function echo<T>(args: T): T {
-  return arg
+  return args
 }
 
 const result = echo('str'); // 传入string 返回string

@@ -11,7 +11,7 @@ interface IPerson {
 
 var Aaron: IPerson = {
   id: 111,
-  name: "Aaron",
+  name: "1",
   age: 20
 };
 
