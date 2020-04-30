@@ -14,7 +14,7 @@ var anyType: any = "ss";
 var numberOrString: number | string = 234;
 
 // 数组, tuple(元组)
-var arrOfNumber: number[] = [1, 2, 3, 4];
+var arrOfNumber: number[] = [1, 2, 3, 4, "s"];
 
 var user: [string, number] = ['Aaron', 1];
 
