@@ -54,3 +54,20 @@ interface KeyPair<T, U> {
   value: U
 }
 let kp1: KeyPair<number, string> = { key: 1, value: "str" }
+let kp2: KeyPair<string, number> = { key: "1", value: 1}
+
+// 泛型函数
+interface IPlus<T> {
+  (a: T, b: T): T
+}
+
+function plus(a: number, b: number): number {
+  return a + b;
+}
+
+function connect(a: string, b: string): string {
+  return a + b;
+}
+
+const a: IPlus<number> = plus;
+const b: IPlus<string> = connect
