@@ -1,9 +1,10 @@
-import React, { FunctionComponentElement, useContext, useState } from "react";
+import React, { FunctionComponentElement, useContext, useState, useRef } from "react";
 import classNames from "classnames";
 import { MenuContext } from "./Menu";
 import { MenuItemProps } from "./MenuItem";
 import Icon from "../Icon/icon";
 import Transition from "../Transition/transition";
+import useClickOutside from "../../hooks/useClickOutside";
 
 export interface SubMenuProps {
   index?: string;
@@ -22,6 +23,7 @@ const SubMenu: React.FC<SubMenuProps> = ({
   const isOpend =
     index && context.mode === "vertical" ? openSubMenus.includes(index) : false;
   const [menuOpen, setMenuOpen] = useState(isOpend);
+  const ulRef = useRef<HTMLLIElement>(null)
   const classes = classNames("menu-item submenu-item", className, {
     "is-active": context.index === index,
     "is-open": menuOpen,
@@ -80,8 +82,11 @@ const SubMenu: React.FC<SubMenuProps> = ({
       </Transition>
     );
   };
+  useClickOutside(ulRef, () => {
+    setMenuOpen(false)
+  })
   return (
-    <li key={index} className={classes} {...hoverEvents}>
+    <li key={index} className={classes} {...hoverEvents} ref={ulRef}>
       <div className="submenu-title" {...clickEvents}>
         {title}
         <Icon icon="angle-down" className="arrow-icon" />
