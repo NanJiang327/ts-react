@@ -6,9 +6,33 @@ import Button, { ButtonType, ButtonSize } from "./components/Button/button";
 import Menu from "./components/Menu/Menu";
 import MenuItem from "./components/Menu/MenuItem";
 import SubMenu from "./components/Menu/SubMenu";
+import Upload from './components/Upload/upload';
+import { action } from '@storybook/addon-actions';
 library.add(fas)
 
 function App() {
+  // const [title, setTitle] = useState('')
+  // const postData = {
+  //   title: 'my title',
+  //   body: 'hello world'
+  // }
+  // useEffect(() => {
+  //   axios.post('https://jsonplaceholder.typicode.com/posts', postData)
+  //     .then(res => {
+  //       console.log(res)
+  //       setTitle(res.data.title)
+  //     })
+  // })
+  const checkFileSize = (file: File) => {
+    return !(Math.round(file.size / 1024) > 50)
+  }
+
+  // const filePromise = (file: File) => {
+  //   const newFile = new File([file], 'new_name.docx', {
+  //     type: file.type
+  //   })
+  //   return Promise.resolve(newFile);
+  // }
 
   return (
     <div className="App">
@@ -53,6 +77,14 @@ function App() {
           Learn React
         </a>
       </header>
+      <div>
+        <Upload
+          action="https://jsonplaceholder.typicode.com/posts/" 
+          onChange={action('changed')}
+          beforeUpload={checkFileSize}
+          // beforeUpload={filePromise}
+        />
+      </div>
     </div>
   );
 }

@@ -15,6 +15,7 @@
     "@types/react-dom": "^16.9.7",
     "@types/storybook__addon-info": "^5.2.1",
     "@types/testing-library__dom": "^7.0.2",
+    "axios": "^0.19.2",
     "node-sass": "^4.14.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
