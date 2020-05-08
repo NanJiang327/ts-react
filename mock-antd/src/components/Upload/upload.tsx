@@ -2,6 +2,7 @@ import React, { FC, useRef, ChangeEvent, useState } from 'react'
 import axios from 'axios'
 import Button, { ButtonType } from '../Button/button'
 import UploadList from './uploadList'
+import Dragger from './dragger'
 
 type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
 export interface UploadFile {
@@ -15,7 +16,7 @@ export interface UploadFile {
   error?: any;
 }
 
-interface UploadProps {
+export interface UploadProps {
   action: string;
   beforeUpload?: (file: File) => boolean | Promise<File>
   onProgress?: (percentage: number, file: File) => void;
@@ -24,6 +25,13 @@ interface UploadProps {
   onSuccess?: (data: any, file: File) => void;
   onError?: (error: any, file: File) => void;
   onRemove?: (file: UploadFile) =>  void
+  headers?: {[key: string]: any}
+  name?: string
+  data?: {[key: string]: any}
+  withCredentials?: boolean;
+  accept?: string;
+  multiple?: boolean;
+  drag?: boolean;
 }
 
 export const Upload: FC<UploadProps> = (props) => {
@@ -35,7 +43,15 @@ export const Upload: FC<UploadProps> = (props) => {
     onSuccess,
     onChange,
     onError,
-    onRemove
+    onRemove,
+    name,
+    headers,
+    data,
+    withCredentials,
+    accept,
+    multiple,
+    drag,
+    children
   } = props;
   const fileRef = useRef<HTMLInputElement>(null);
   const [fileList, setFileList] = useState<UploadFile[]>(defaultFileList || [])
@@ -104,13 +120,22 @@ export const Upload: FC<UploadProps> = (props) => {
       percent: 0,
       raw: file
     }
-    setFileList([_file, ...fileList])
+    setFileList(preList => {
+      return [_file, ...preList]
+    })
     const formData = new FormData()
-      formData.append(file.name, file)
+      formData.append(name || 'file', file)
+      if (data) {
+        Object.keys(data).forEach(key => {
+          formData.append(key, data[key])
+        })
+      }
       axios.post(action, formData, {
         headers: {
+          ...headers,
           'Content-Type': 'multipart/form-data'
         },
+        withCredentials,
         onUploadProgress: (e) => {
           let percentage = Math.round((e.loaded * 100) / e.total) || 0;
           if (percentage < 100) {
@@ -144,18 +169,35 @@ export const Upload: FC<UploadProps> = (props) => {
   return (
     <div className="react-upload-component">
       <Button btnType={ButtonType.Primary} onClick={handleClick}>Upload File</Button>
-      <input type="file" 
+      <div 
+        className="react-upload-input"
+        style={{display: 'inline-block'}}
+        onClick={handleClick}
+      >
+        {drag ? 
+          <Dragger onFile={(files) => {uploadFiles(files)}}>
+            {children}
+          </Dragger> : children
+        }
+        <input type="file" 
         className="react-file-input" 
         style={{display: 'none'}} 
         ref={fileRef}
         onChange={handleChange}
+        accept={accept}
+        multiple={multiple}
       />
+      </div>
       <UploadList
         fileList={fileList}
         onRemove={handleRemove}
       />
     </div>
   )
+}
+
+Upload.defaultProps = {
+  name: 'file'
 }
 
 export default Upload;
