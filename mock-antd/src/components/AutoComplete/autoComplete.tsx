@@ -7,6 +7,7 @@ import useClickOutside from '../../hooks/useClickOutside'
 
 interface DataSourceObject {
   value: string;
+  login: string;
 }
 export type DataSourceType<T = {}> = T & DataSourceObject
 
@@ -94,11 +95,11 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
   }
 
   const renderTemplate = (item: DataSourceType) => {
-    return renderOption ? renderOption(item) : item.value
+    return renderOption ? renderOption(item) : item.login
   }
   const generateDropdown = () => {
     return (
-      <ul>
+      <ul className="react-suggestion-list">
         {suggestions.map((item, index) => {
           const cnames = classNames('suggestion-item', {
             'item-highlighted': index === hightlightIndex
@@ -126,3 +127,5 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     </div>
   )
 }
+
+export default AutoComplete;

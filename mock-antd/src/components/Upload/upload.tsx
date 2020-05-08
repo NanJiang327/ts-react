@@ -168,7 +168,7 @@ export const Upload: FC<UploadProps> = (props) => {
 
   return (
     <div className="react-upload-component">
-      <Button btnType={ButtonType.Primary} onClick={handleClick}>Upload File</Button>
+      {/* <Button btnType={ButtonType.Primary} onClick={handleClick}>Upload File</Button> */}
       <div 
         className="react-upload-input"
         style={{display: 'inline-block'}}
